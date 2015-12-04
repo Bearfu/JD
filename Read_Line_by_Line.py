@@ -6,7 +6,7 @@ def _Read_Line_by_Line(host):
 	for line in open(host, encoding="utf-8"):
 		line = line.strip("\n")
 		all_line.append(line)
-	#print(all_line)
+	print(all_line)
 
 	return all_line
 
