@@ -1,0 +1,7 @@
+use ypt
+CREATE TABLE  if not exists detail (
+ID int(10) NOT NULL  AUTO_INCREMENT,
+yptID int(10),
+detail text,
+PRIMARY KEY (ID)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
