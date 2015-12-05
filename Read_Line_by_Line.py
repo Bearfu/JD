@@ -10,6 +10,7 @@ def _Read_Line_by_Line(host):
 
 	return all_line
 
+
 if __name__ == '__main__':
-	host = "JD_menu_url.txt"
+	host = "JD_index_url.txt"
 	_Read_Line_by_Line(host)
