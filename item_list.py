@@ -10,7 +10,7 @@ def _JDURL():
 	soup = BeautifulSoup(open("F:\PycharmProjects\JD\jdhk.html", encoding="utf-8"))
 	# 分类目录相关信息
 	lists = soup.find_all('div', {'class': 'item'})
-	#print(lists)
+	# print(lists)
 	for item in lists:
 		href = item.find_all()
 		for a in href:
@@ -29,7 +29,7 @@ def _JDURL():
 if __name__ == '__main__':
 	with open('JD_menu_urls.txt', mode='w', encoding="utf-8") as file:
 		_JDURL()
-	Deduplication._Deduplication("JD_menu_urls", "JD_menu_url")
+	Deduplication._Deduplication("JD_menu_urls.txt", "JD_menu_url.txt")
 	print("运行终了")
 
 
