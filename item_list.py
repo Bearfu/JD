@@ -7,7 +7,7 @@ import Deduplication
 
 # 从本地读取爬到的静态网页，创建BeautifulSoup对象
 def _JDURL():
-	soup = BeautifulSoup(open("F:\PycharmProjects\JD\jdhk.html", encoding="utf-8"))
+	soup = BeautifulSoup(open("/Users/fuzhe/PycharmProjects/Python_other_Tools/Python_other_Tools/JD/jdhk.html", encoding="utf-8"))
 	# 分类目录相关信息
 	lists = soup.find_all('div', {'class': 'item'})
 	# print(lists)

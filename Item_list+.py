@@ -5,7 +5,7 @@ import commodity_list
 def _All_Index():
 	# 读取部分目录信息，获取目录URL
 	host_Url = Read_Line_by_Line._Read_Line_by_Line("JD_menu_url.txt")
-	# print(host_Url)
+	#print(host_Url)
 	for host in host_Url:
 		line = host.split('@@@')
 		#print(line)
@@ -34,10 +34,12 @@ def _All_Index():
 	print("运行终了")
 
 
+
+
+
 if __name__ == '__main__':
 	with open('JD_menu+_url.txt', mode='w', encoding="utf-8") as file:
 		_All_Index()
-	# 文件去重
+	#文件去重
 	import Deduplication
-
-	Deduplication._Deduplication("JD_menu+_url.txt", "JD_index_url.log")
+	Deduplication._Deduplication("JD_menu+_url", "JD_index_url")

@@ -1,27 +1,19 @@
 __author__ = 'bear_fu'
 from bs4 import BeautifulSoup
-import Deduplication
 import requests
-import Read_Line_by_Line
-import test
+import Creep_Tools
+
 
 # 从商品展示页的html文件中取出单个商品的地址，并写入到ＴＸＴ文件中
 # 获取目录页面内的所有商品网址信息并写入到文件中
-
+# 从TXT文件中获取url
 def _catch_Index_Url():
-	a = 0
-	Max_line = 247
-	# 从TXT文件中获取url
-	All_line = Read_Line_by_Line._Read_Line_by_Line("JD_index_url.log")
+	print("开始从TXT文件中获取url")
+	All_line = Creep_Tools.Read_Line_by_Line._Read_Line_by_Line("JD_index_url.txt")
 	for line in All_line:
-		if line is not '':
-			print(line)
-			a = a + 1
-			line_arr = line.split('@@@')
-			index_name = line_arr[0]
-			index_url = line_arr[1]
-			# 测试用URL
-			# index_url = "http://list.jd.hk/9855-9857-9914.html"
+			line = line.split('@@@')
+			index_name = line[0]
+			index_url = line[1]
 			# 获取此URL下的soup
 			soup = _Analyze_Soup(index_url)
 			# 获取此URL下的最大页数
@@ -31,16 +23,15 @@ def _catch_Index_Url():
 				print(Max_Pag)
 			elif Max_Pag == 1:
 				try:
-					print("Max_Pag = 1")
+					print(Max_Pag)
 					url = index_url
 					soup = _Analyze_Soup(url)
 					if soup is not None:
 						# 获取此URL下的所有商品页面的URL
 						url_list = parser_for_one_url(soup)
 						for url in url_list:
-							test._Progress_Bar(a, Max_line)
+							print(index_name + "@@@" + url + "@@@" + Max_Pag)
 							commdity_url = index_name + "@@@" + url
-							print(commdity_url)
 							file.write(commdity_url + '\n')
 					else:
 						pass
@@ -49,18 +40,18 @@ def _catch_Index_Url():
 			else:
 				try:
 					for page in range(1, Max_Pag):
+						print(index_name + str(page))
 						page = "&page=" + str(page)
 						print(index_name + page)
 						try:
 							url = index_url + page
-							soup = _Analyze_Soup(url)
+							soup = Creep_Tools._Analyze_Soup(url)
 							if soup is not None:
 								# 获取此URL下的所有商品页面的URL
 								url_list = parser_for_one_url(soup)
 								for url in url_list:
-									test._Progress_Bar(a, Max_line)
-									commdity_url = index_name + "@@@" + url
-									print(commdity_url)
+									print(index_name + "@@@" + url + "@@@" + page)
+									commdity_url = index_name + "@@@" + url +page
 									file.write(commdity_url + '\n')
 							else:
 								pass
@@ -69,21 +60,6 @@ def _catch_Index_Url():
 				except:
 					pass
 	print("")
-
-
-# 获取路径的soup文件
-# input 需要解析的网址URL
-# output 解析出的soup文件
-def _Analyze_Soup(url):
-	try:
-		responce = requests.get(url, timeout=1)
-	except:
-		responce = None
-	if responce is not None:
-		soup = BeautifulSoup(responce.text, )
-		return soup
-	else:
-		return None
 
 
 # 最大页数
@@ -125,12 +101,11 @@ def parser_for_one_url(soup):
 		pass
 	return url_list
 
-
 if __name__ == '__main__':
 	with open('JD_commodity_urls.txt', mode='w', encoding="utf-8") as file:
 		_catch_Index_Url()
-	Deduplication._Deduplication("JD_commodity_urls.txt", "JD_commodity_url.log")
+	Creep_Tools._Deduplication("JD_commodity_urls.log")
+	# 测试用URL
+	# soup =_Analyze_Soup("http://list.jd.hk/list.html?cat=1319,1525,7057&go=0&gjz=0")
+	# parser_for_one_url(soup)
 	print("运行终了")
-	print("运行结果存放在_JD_commodity_urls.txt")
-
-
