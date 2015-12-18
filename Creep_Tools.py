@@ -1,5 +1,7 @@
 __author__ = 'fuzhe'
-
+import threading
+import os
+import queue
 
 class Creep_Tools:
 
@@ -99,15 +101,18 @@ class Creep_Tools:
 
 	# 图片下载
 	# Input 图片的下载路径，图片的存储名称，图片的存储路径
-	def _Download_Picture(url, name, save_path):
+	def _Download_Picture(url,save_path):
 		import  urllib
-		image_name = save_path + "/" + name + ".jpg"
+		image_name = save_path + "/" + url
 		# 保存文件时候注意类型要匹配，如要保存的图片为jpg，则打开的文件的名称必须是jpg格式，否则会产生无效图片
 		conn = urllib.request.urlopen(url)
 		f = open(image_name, 'wb')
 		f.write(conn.read())
 		f.close()
 		print('Pic Saved!')
+
+
+
 
 	# Beautsoup解析
 	def _html_to_soup(html):
@@ -120,5 +125,32 @@ class Creep_Tools:
 
 
 
+# 本类主要是得到URL列表组然后进行下载，存储
+# __author__ = 'Zhao_yun'
+# 调用其中的_Download_Pic方法
+# Imput 图片存放的路径（推荐绝对路径）path，下载的url，启用的线程数num
+class download(threading.Thread):
+    def __init__(self, que, path):
+        threading.Thread.__init__(self)
+        self.que = que
+        self.path = path
+
+    def run(self):
+        while True:
+            if not self.que.empty():
+                # 利用wget这个命令行下载工具，-q是安静模式
+                os.system('wget -P %s %s -q' % (self.path, self.que.get()))
+            else:
+                break
+
+    def _Download_Pic(path, urls, num):
+
+        que = queue.Queue()
+        for i in urls:
+            que.put(i)
+        for i in range(num):
+            d = download(que, path)
+            d.start()
+
 if __name__ == '__main__':
-	Creep_Tools._Deduplication("1.log")
+	print("TEST")
